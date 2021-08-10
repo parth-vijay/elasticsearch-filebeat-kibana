@@ -19,7 +19,7 @@
     echo "deb https://artifacts.elastic.co/packages/7.x/apt stable main" | sudo tee -a /etc/apt/sources.list.d/elastic-7.x.list
     sudo apt-get update && sudo apt-get install filebeat
 
-## Modify /etc/filebeat/filebeat.yml to set the connection information:
+## Modify **/etc/filebeat/filebeat.yml** to set the connection information:
     output.elasticsearch:
         hosts: [localhost:9200]
 
@@ -32,7 +32,7 @@
 ## Enable and configure the apache module:
     sudo filebeat modules enable apache
 
-## Configure /etc/filebeat/modules.d/apache.yml to set the logs path:
+## Configure **/etc/filebeat/modules.d/apache.yml** to set the logs path:
     - module: apache
       access:
         enabled: true
