@@ -26,10 +26,14 @@
     setup.kibana:
         host: "localhost:5601"
 
+## Test Filebeat configuration:
+    sudo filebeat test output
+    sudo filebeat test config
+
 ## List the module available in Filebeat:
     sudo filebeat modules list
 
-## Enable and configure the apache module:
+## Enable/Disable Filebeat module:
     sudo filebeat modules enable apache
 
 ## Configure */etc/filebeat/modules.d/apache.yml* to set the logs path:
@@ -42,11 +46,63 @@
         enabled: true
         var.paths: ["/var/log/apache2/error.log"]
 
-## Set up Kibana dashboard for Apache:
+## Set up Kibana dashboard for Apache Logs:
     sudo filebeat setup
     sudo filebeat setup --dashboards
+
+## Run Filebeat service:
     sudo systemctl start filebeat
+    sudo systemctl enable filebeat
     sudo systemctl status filebeat
     sudo systemctl restart filebeat
 
+## Install Metricbeat on Ubuntu:
+    sudo apt install metricbeat
+
+## Modify */etc/metricbeat/metricbeat.yml* to set the connection information:
+    output.elasticsearch:
+        hosts: [localhost:9200]
+
+    setup.kibana:
+        host: "localhost:5601"
+
+## Test Metricbeat configuration:
+    sudo metricbeat test output
+    sudo metricbeat test config
+
+## List the module available in Metricbeat:
+    sudo metricbeat modules list
+
+## Enable/Disable the Metricbeat module:
+    sudo metricbeat modules enable apache 
+    sudo metricbeat modules disable system
+
+## Configure */etc/metricbeat/modules.d/apache.yml*:
+    - module: apache
+      metricsets:
+        - status
+      period: 10s
+      hosts: ["http://127.0.0.1"]
+
+## Set up Kibana dashboard for Apache Metrics:
+    sudo metricbeat setup
+    sudo metricbeat setup --dashboards
+
+## Run Metricbeat service:
+    sudo systemctl start metricbeat
+    sudo systemctl enable metricbeat
+    sudo systemctl status metricbeat
+    sudo systemctl restart metricbeat
+
+## Configure virtualhost file for enabling *server-status*:
+    <Location /server-status>
+        SetHandler server-status
+    </Location>
+
+## Enable Apache *status* module:
+    sudo a2enmod status
+    sudo systemctl restart apache2
+    sudo systemctl reload apache2
     
+
+
